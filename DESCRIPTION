@@ -1,0 +1,25 @@
+Package: PredicTER
+Title: Estimates the time required to complete a systematic review or systematic map.
+Version: 0.0.0.9000
+Authors@R: 
+    c(person(given = "Martin",
+             family = "Westgate",
+             email = "martin.westgate@csiro.au",
+             role = "aut"),
+      person(given = "Matthew",
+             family = "Grainger",
+             email = "matthewjamesgrainger@gmail.co.uk",
+             role = c("cre")),
+      person(given = "X",
+             family = "Y",
+             email = "",
+             role = "aut"),
+      person(given = "Z",
+             family = "A",
+             email = "",
+             role = "aut"))
+Description: Uses data from a survey of Review authors to predict the time it takes to complete a Systematic Evidence Synthesis. 
+License: AGPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
