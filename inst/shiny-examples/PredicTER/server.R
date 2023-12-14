@@ -291,13 +291,13 @@ server <- function(input, output, session){
       stringsAsFactors = FALSE
     )
 
-		
+
 		colnames(lookup_dframe) <- c("row", "stage", "column")
 		lookup_dframe$value <- unlist(lapply(lookup_names,
       function(a){input[[a]]}
     ))
 		lookup_dframe<-lookup_dframe[order(lookup_dframe$row, lookup_dframe$column),] # unsorted the df looks like this:
-		
+
 		# checked nperday percent
 		# row2    14.6      10     854
 		# row3     192    25.0      10
@@ -307,9 +307,9 @@ server <- function(input, output, session){
 		# row7    11.7       0    76.0
 		# row8   100.0       0     6.9
 		# row9    59.2      24       0
-		
+
 		#sorted the daf looks like this:
-		
+
 		# checked nperday percent
 		# row2      10     854    14.6
 		# row3      10     192    25.0
@@ -319,24 +319,24 @@ server <- function(input, output, session){
 		# row7       0    11.7    76.0
 		# row8       0     6.9   100.0
 		# row9       0      24    59.2
-		
-		
 
-		
-		# convert to data.frame 
+
+
+
+		# convert to data.frame
 		count_dframe <- as.data.frame(
 			do.call(rbind, split(lookup_dframe[, "value"], lookup_dframe$row)),
 			stringsAsFactors = FALSE
     )
 
-		
+
 		colnames(count_dframe) <- c("checked", "nperday", "percent")
 		initial_dframe <- data.frame(
 			checked = c(0),
 			nperday = c(1),
 			percent = safe_numeric(input$unique_percent)
     )
-	
+
 		count_dframe <- as.data.frame(
       rbind(initial_dframe, count_dframe),
       stringsAsFactors=FALSE
@@ -344,8 +344,8 @@ server <- function(input, output, session){
 		count_dframe$checked <- 1 + (as.numeric(count_dframe$checked) * 0.01)
 		count_dframe$nperday <- as.numeric(count_dframe$nperday)
 		count_dframe$percent <- as.numeric(count_dframe$percent) * 0.01
-		
-	
+
+
 
 		# calculate number of articles, and time taken to process them
 		count_dframe$cumulative_percent <- cumprod(count_dframe$percent)
@@ -469,8 +469,8 @@ server <- function(input, output, session){
         labels = rev(as.character(time_dframe$y))
       )
     }
-		
-	
+
+
 
     # save a 'clean' version for user
 		time_dframe_clean <- time_dframe[, c("stage", "group_factor", "value")]
@@ -655,7 +655,7 @@ server <- function(input, output, session){
 	observeEvent(input$help_review_type, {
 		shiny::showModal(
 			shiny::modalDialog(
-				includeHTML("0_review_type_help_text.txt"),
+				includeHTML("www/0_review_type_help_text.txt"),
 				title = "Review Type",
 				footer = shiny::modalButton(
           label = "OK",
@@ -669,7 +669,7 @@ server <- function(input, output, session){
 	observeEvent(input$help_planning, {
 		shiny::showModal(
 			shiny::modalDialog(
-				includeHTML("1_planning_help_text.txt"),
+				includeHTML("www/1_planning_help_text.txt"),
 				title = "Planning",
 				footer = shiny::modalButton(
           label = "OK",
@@ -683,7 +683,7 @@ server <- function(input, output, session){
 	observeEvent(input$help_searching, {
 		shiny::showModal(
 			shiny::modalDialog(
-				includeHTML("2_searching_help_text.txt"),
+				includeHTML("www/2_searching_help_text.txt"),
 				title = "Searching",
         footer = shiny::modalButton(
           label = "OK",
@@ -697,7 +697,7 @@ server <- function(input, output, session){
 	observeEvent(input$help_screening, {
 		shiny::showModal(
 			shiny::modalDialog(
-				includeHTML("3_screening_help_text.txt"),
+				includeHTML("www/3_screening_help_text.txt"),
 				title = "Screening",
         footer = shiny::modalButton(
           label = "OK",
@@ -710,9 +710,9 @@ server <- function(input, output, session){
 
 	observeEvent(input$help_deas, {
 		if(any(input$tabs == "syst_review")){
-      deas_help <- "4_DEAS_SR_help_text.txt"
+      deas_help <- "www/4_DEAS_SR_help_text.txt"
 		}else{
-      deas_help <- "4_DEAS_SM_help_text.txt"
+      deas_help <- "www/4_DEAS_SM_help_text.txt"
     }
 		shiny::showModal(
 			shiny::modalDialog(
@@ -730,7 +730,7 @@ server <- function(input, output, session){
 	observeEvent(input$help_reporting, {
 		shiny::showModal(
 			shiny::modalDialog(
-				includeHTML("5_reporting_help_text.txt"),
+				includeHTML("www/5_reporting_help_text.txt"),
 				title = "Reporting",
         footer = shiny::modalButton(
           label = "OK",
@@ -744,7 +744,7 @@ server <- function(input, output, session){
 	observeEvent(input$about, {
 		shiny::showModal(
 			shiny::modalDialog(
-				includeHTML("6_about_PredicTER.txt"),
+				includeHTML("www/6_about_PredicTER.txt"),
 				title = "PredicTER",
         footer = shiny::modalButton(
           label = "OK",
