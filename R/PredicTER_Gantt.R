@@ -1,7 +1,19 @@
 library(shiny)
 library(tidyverse)
+library(DT)
 
 data<-PredicTER_times_output_1_
+
+rapid_data <- data.frame(
+  Stage = c("Protocol", "Locating evidence"),
+  Rapid = c("Narrow the scope of the Review", "Limit the number of databases searched"),
+  Time_saved = c(NA, 3),
+  Acceleration = c("Yes", "No"),
+  Short_cut = c("No", "Yes"),
+  Stage_where_saved = c("Number of citations to screen/number of included studies, data extraction/ data analysis", "Development and undertaking of the search "),
+  Red_Flags = c(NA, "Yes"),
+  Generalisability = c("low", NA)
+)
 
 ui <- fluidPage(
   titlePanel("PredicTER_Gantt"),
@@ -28,7 +40,10 @@ ui <- fluidPage(
       sliderInput("comms", "Communication", min=0, max=100, value=data$time_days[18]),
       sliderInput("meet", "Meetings", min=0, max=100, value=data$time_days[19])),
     mainPanel(
-      plotOutput("plot")
+      plotOutput("plot"),
+      br(),
+      br(),
+      DTOutput("table")
     ))
   )
 
@@ -45,8 +60,7 @@ server <- function(input, output, session) {
       updateSliderInput(session, "academicS", value = input$academicS * ratio)
       updateSliderInput(session, "greyS", value = input$greyS * ratio)
       updateSliderInput(session, "biblio", value = input$biblio * ratio)
-      updateSliderInput(session, "duplicates", value=
-      input$duplicates*ratio)
+      updateSliderInput(session, "duplicates", value= input$duplicates*ratio)
       updateSliderInput(session, "title",value= input$title*ratio)
       updateSliderInput(session, "abstract", value= input$abstract*ratio)
       updateSliderInput(session, "full_ret", value= input$full_ret*ratio)
@@ -60,7 +74,16 @@ server <- function(input, output, session) {
       updateSliderInput(session, "report", value=input$report*ratio)
       updateSliderInput(session, "comms", value=input$comms*ratio)
       updateSliderInput(session, "meet", value=input$meet*ratio)
-      }
+    }
+  })
+
+  observeEvent(input$table_rows_selected, {
+    selected_row <- rapid_data[input$table_rows_selected, ]
+    if (!is.na(selected_row$Time_saved)) {
+      # Apply time savings to specific sliders
+      updateSliderInput(session, "academicS", value = input$academicS - (selected_row$Time_saved/2))
+      updateSliderInput(session, "greyS", value = input$greyS - (selected_row$Time_saved/2))
+    }
   })
 
   output$plot <- renderPlot({
@@ -69,12 +92,17 @@ server <- function(input, output, session) {
                 input$comms,input$meet)
     labels <- c("Administration", "Planning", "Protocol development", "Academic Searching", "Grey-lit searching", "Checking bibliographies","Removing duplicates","Title screening", "Abstract screening","Full text retrieval","Full text screening","Meta-data extraction","Critical appraisal", "Data extraction","Data preparation","Synthesis","Report writing","Communication","Meetings")
     data <- data.frame(values, labels)
+    data$labels<-fct_rev(factor(data$labels, levels=unique(data$labels)))
 
     ggplot(data, aes(x = labels, y = values)) +
       geom_bar(stat = "identity") +
       labs(title = "", y = "Days", x = "Stage")+
       coord_flip()+
       ggthemes::theme_base()
+  })
+
+  output$table <- renderDT({
+    datatable(rapid_data, selection = 'single')
   })
 }
 
