@@ -7,6 +7,10 @@ Please see [this paper](https://conbio.onlinelibrary.wiley.com/doi/10.1111/cobi.
 
 ## Contributing
 
+This project was first developed by [Martin Westgate](https://github.com/mjwestgate/PredicTER) and then extended by the [ESHackathon](https://github.com/ESHackathon/PredicTER) team. 
+
+To contribute to the package development please read the [Code of Conduct](https://github.com/ESHackathon/predicTER/blob/main/CODE_OF_CONDUCT.md) 
+
 
 ## References
 
